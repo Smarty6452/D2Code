@@ -8,6 +8,7 @@ import { discoverRoutes } from './routes/discover'
 import { swipeRoutes } from './routes/swipes'
 import { matchRoutes } from './routes/matches'
 import { chatRoutes } from './routes/chat'
+import { uploadRoutes } from './routes/uploads'
 
 const app = new Hono()
 
@@ -33,6 +34,7 @@ app.route('/discover', discoverRoutes)
 app.route('/swipes', swipeRoutes)
 app.route('/matches', matchRoutes)
 app.route('/chat', chatRoutes)
+app.route('/uploads', uploadRoutes)
 
 // 404 fallback
 app.notFound((c) => c.json({ message: 'Not found' }, 404))

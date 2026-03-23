@@ -144,8 +144,8 @@ pnpm --filter @d2code/api db:push
 ## Current MVP Phase
 
 **Phase 0 — Setup** ✅
-**Phase 1 — Auth & Profiles** → next
-**Phase 2 — Discovery Feed**
+**Phase 1 — Auth & Profiles** ✅
+**Phase 2 — Discovery Feed** → next
 **Phase 3 — Matches & Chat**
 **Phase 4 — Polish & Deploy**
 

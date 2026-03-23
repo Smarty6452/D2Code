@@ -3,14 +3,13 @@
 import { useState } from 'react'
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Github } from 'lucide-react'
+import { Github, Loader2, Eye, EyeOff } from 'lucide-react'
 
 export function LoginForm() {
   const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
 
@@ -19,12 +18,7 @@ export function LoginForm() {
     setLoading(true)
     setError(null)
 
-    const result = await signIn('credentials', {
-      email,
-      password,
-      redirect: false,
-    })
-
+    const result = await signIn('credentials', { email, password, redirect: false })
     setLoading(false)
 
     if (result?.error) {
@@ -37,46 +31,69 @@ export function LoginForm() {
 
   return (
     <div className="space-y-4">
-      <Button
+      {/* GitHub SSO */}
+      <button
         type="button"
-        variant="outline"
-        className="w-full border-slate-700 text-slate-300 hover:bg-slate-800"
         onClick={() => signIn('github', { callbackUrl: '/discover' })}
+        className="flex w-full items-center justify-center gap-2.5 rounded-2xl border border-white/[0.08] bg-white/[0.04] px-4 py-2.5 text-sm font-medium text-zinc-300 transition-all hover:border-white/[0.14] hover:bg-white/[0.08] hover:text-white"
       >
         <Github size={16} />
         Continue with GitHub
-      </Button>
+      </button>
 
-      <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t border-slate-700" />
-        </div>
-        <div className="relative flex justify-center text-xs">
-          <span className="bg-slate-950 px-2 text-slate-500">or</span>
-        </div>
+      {/* Divider */}
+      <div className="relative flex items-center gap-3">
+        <div className="flex-1 border-t border-white/[0.06]" />
+        <span className="text-[11px] font-medium uppercase tracking-widest text-zinc-700">or</span>
+        <div className="flex-1 border-t border-white/[0.06]" />
       </div>
 
+      {/* Email/password form */}
       <form onSubmit={handleSubmit} className="space-y-3">
-        <Input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          className="border-slate-700 bg-slate-900 text-white placeholder:text-slate-500"
-        />
-        <Input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          className="border-slate-700 bg-slate-900 text-white placeholder:text-slate-500"
-        />
-        {error && <p className="text-sm text-red-400">{error}</p>}
-        <Button type="submit" className="w-full bg-blue-500 hover:bg-blue-600" disabled={loading}>
+        <div className="space-y-2">
+          <input
+            type="email"
+            placeholder="Email address"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="w-full rounded-2xl border border-white/[0.08] bg-white/[0.04] px-4 py-2.5 text-sm text-white placeholder:text-zinc-600 outline-none transition-all focus:border-violet-500/40 focus:bg-white/[0.06]"
+          />
+
+          <div className="relative">
+            <input
+              type={showPassword ? 'text' : 'password'}
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="w-full rounded-2xl border border-white/[0.08] bg-white/[0.04] px-4 py-2.5 pr-10 text-sm text-white placeholder:text-zinc-600 outline-none transition-all focus:border-violet-500/40 focus:bg-white/[0.06]"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((v) => !v)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-600 hover:text-zinc-400"
+              tabIndex={-1}
+            >
+              {showPassword ? <EyeOff size={14} /> : <Eye size={14} />}
+            </button>
+          </div>
+        </div>
+
+        {error && (
+          <p className="animate-fade-in rounded-xl border border-red-500/20 bg-red-500/10 px-3 py-2 text-xs text-red-400">
+            {error}
+          </p>
+        )}
+
+        <button
+          type="submit"
+          disabled={loading}
+          className="glow-primary flex w-full items-center justify-center gap-2 rounded-2xl bg-violet-600 py-2.5 text-sm font-semibold text-white transition-all hover:bg-violet-500 disabled:opacity-60"
+        >
+          {loading && <Loader2 size={14} className="animate-spin" />}
           {loading ? 'Signing in…' : 'Sign In'}
-        </Button>
+        </button>
       </form>
     </div>
   )

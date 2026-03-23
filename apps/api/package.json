@@ -17,6 +17,8 @@
   "dependencies": {
     "@d2code/shared": "workspace:*",
     "@hono/node-server": "^1.13.7",
+    "@hono/zod-validator": "^0.4.3",
+    "@supabase/supabase-js": "^2.47.10",
     "bcryptjs": "^2.4.3",
     "drizzle-orm": "^0.39.3",
     "hono": "^4.7.2",

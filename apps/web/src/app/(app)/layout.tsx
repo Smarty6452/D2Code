@@ -10,9 +10,10 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-slate-950">
+    <div className="flex min-h-screen flex-col bg-background">
       <AppNav user={session.user} />
-      <main className="flex-1">{children}</main>
+      {/* Top padding for fixed desktop nav, bottom padding for mobile nav */}
+      <main className="flex-1 pt-14 pb-20 md:pb-0">{children}</main>
     </div>
   )
 }
